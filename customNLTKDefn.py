@@ -16,6 +16,12 @@ from textblob import TextBlob
 from textblob.sentiments import NaiveBayesAnalyzer
 from nltk.corpus import PlaintextCorpusReader
 from nltk.corpus import stopwords
+from lxml import etree
+
+#Create XML
+case = etree.Element('Case')
+court = etree.Element('Court')
+xmlCourtName = etree.Element('CourtName')
 
 stop = stopwords.words('english')
 
@@ -44,7 +50,7 @@ def convert_pdf_to_txt(path):
     return text
 
 #File preprocessing function
-def preprocess(sentence):
+def preProcess(sentence):
 	sentence = sentence.lower()
 	tokenizer = RegexpTokenizer(r'\w+')
 	tokens = tokenizer.tokenize(sentence)
@@ -52,18 +58,36 @@ def preprocess(sentence):
 	return " ".join(tokens)
 
 #Information Extraction preprocessing function
-def ie_preprocess(document):
+def iePreprocess(document):
     sentences = nltk.sent_tokenize(document) #Sentence tokenizing
     sentences = [nltk.word_tokenize(sent) for sent in sentences] #word tokenizing
     #sentences = [nltk.pos_tag(sent) for sent in sentences] #part of speech tagging
     return sentences[0]
 
-def extract_parties(words):
+#Extract Court Name function
+def extractCourtName(string):
+    court_name = string[string.index("judicature")+2]
+    if(court_name == 'bombayordinary'):
+        court_name= 'bombay'
+    global xmlCourtName = count_name
+    return court_name
+
+def extractParties(words):
     parties = []
+    respondentType = ""
+    petitionerType = ""
     for w in words:
-        if w == 'plaintiff':
+        if (
+        w == 'apellant' or w == 'plaintiff' or
+        w == 'petitioner' or w == 'applicant'
+        ):
             requiredText = words[words.index(w)-10:words.index(w)+10]
-            break
+            petitionerType = w;
+        elif(
+        w == 'respondent' or w == 'defendant'
+        ):
+            respondentType = w;
+
     requiredTextTagged = nltk.pos_tag(requiredText)
     # Chunking with Regular Expressions
     chunkGram = r"""
@@ -78,15 +102,17 @@ def extract_parties(words):
     		if(i==2):
     			break
     		parties.append(' '.join([l[0] for l in res.leaves()]))
-    return parties
+    return parties, petitionerType, respondentType
 
 def getCounselDetailPara(words):
     applicantCounselGroup = []
     respondentCounselGroup = []
+    counselPara = []
 
     for w in words:
         if w == 'advocate' or w == 'adv':
             counselPara = words[words.index(w)-5:words.index(w)+40]
+
     for w in counselPara:
         if w == 'applicant' or w == 'plaintiff':
             applicantCounselGroup = counselPara[0:counselPara.index(w)]
@@ -97,7 +123,7 @@ def getCounselDetailPara(words):
 def extractApplicantCounselGroup(words):
     applicantCounselGroup = []
 
-    applicantCounsel,_ = getCounselDetailPara(preprocessedText)
+    applicantCounsel,_ = getCounselDetailPara(words)
 
     advocatesTagged = nltk.pos_tag(applicantCounsel)
 
@@ -120,10 +146,10 @@ def extractApplicantCounselGroup(words):
 
     return applicantCounselGroup
 
-def extractRespondentCounselGroup(preprocessedText):
+def extractRespondentCounselGroup(words):
     respondentCounselGroup = []
 
-    _, respondentCounsel = getCounselDetailPara(preprocessedText)
+    _, respondentCounsel = getCounselDetailPara(words)
 
     advocatesTagged = nltk.pos_tag(respondentCounsel)
 
@@ -145,8 +171,51 @@ def extractRespondentCounselGroup(preprocessedText):
 
     return respondentCounselGroup
 
-#Extract Court Name function
-def extract_court_name(string):
-    list_of_words = string.split()
-    count_name = list_of_words[list_of_words.index("JUDICATURE")+2]
-    return count_name
+def extractCoramGroup(words):
+    coramAndDate = []
+    coramAndDateTagged = []
+    judge = []
+    judgeType = []
+    day = []
+    date = []
+    month = []
+    year = []
+
+    for w in words:
+        if(w == 'coram'):
+            coramAndDate = words[words.index(w)+1:words.index(w)+20]
+
+    coramAndDateTagged = nltk.pos_tag(coramAndDate)
+
+    # Chunking with Regular Expressions
+    chunkGram = r"""
+    Judge: {<JJ><NN>{2,2}}
+    Date: {<CD><N.*><JJ><CD>}
+    JPosition: {<NN>}
+    """
+    chunkParser = nltk.RegexpParser(chunkGram)
+    result = chunkParser.parse(coramAndDateTagged)
+
+    for res in result.subtrees():
+        if(res.label() == 'Judge'):
+            judge.append(' '.join([l[0] for l in res.leaves()]))
+        if(res.label() == 'Date'):
+            day.append(' '.join([l[0] for l in res.leaves()]))
+    for res in result.subtrees():
+        if(res.label() == 'JPosition'):
+            judgeType.append(' '.join([l[0] for l in res.leaves()]))
+    i=0
+    for res in result.subtrees():
+        if(res.label() == 'Date'):
+            for l,v in enumerate(res.leaves()):
+                if(l == 0):
+                    date.append(''.join(v[0]))
+                if(l == 2):
+                    month.append(''.join(v[0]))
+                if(l == 3):
+                    year.append(''.join(v[0]))
+
+
+    return judge,judgeType,day,date,month,year
+
+def generateXMLFile()

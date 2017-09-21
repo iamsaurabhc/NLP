@@ -1,0 +1,33 @@
+Case
+	Court
+		CourtName
+	PartiesGroup
+		Parties
+			PetitionerGroup
+				Petitioner(Type)
+			RespondentGroup
+				Respondent(Type)
+	CounselGroup
+		forPetitioner
+			CounselName
+			.
+			.
+		forRespondent
+			CounselName
+			.
+			.
+	CoramGroup
+		Judge(Postion)
+		.
+		.
+	Date(Month,Date,Year,Type)
+
+	JudgementGroup(Title)
+		Para
+			Cite
+				Title
+				Citation
+			Act
+				Title(ID)
+			SeRef
+				Title(ID)
