@@ -45,13 +45,13 @@ def convert_pdf_to_txt(path):
     retstr.close()
     return text
 
-#TXT file preprocessing function
+#File preprocessing function
 def preprocess(sentence):
 	sentence = sentence.lower()
 	tokenizer = RegexpTokenizer(r'\w+')
 	tokens = tokenizer.tokenize(sentence)
-	filtered_words = [w for w in tokens if not w in stopwords.words('english')]
-	return " ".join(filtered_words)
+	#filtered_words = [w for w in tokens if not w in stopwords.words('english')]
+	return " ".join(tokens)
 
 #Information Extraction preprocessing function
 def ie_preprocess(document):
@@ -76,39 +76,54 @@ def extract_plaintiff_names(string):
 def extract_names(document):
     names = []
     sentences = ie_preprocess(document)
-    #print(sentences)
     for tagged_sentence in sentences:
         for chunk in nltk.ne_chunk(tagged_sentence):
             if type(chunk) == nltk.tree.Tree:
                 if chunk.label() == 'PERSON':
                     names.append(' '.join([c[0] for c in chunk]))
     return names
+def extract_parties(document):
+    parties = ["",""]
+    for word in document:
+        if(word == 'Plaintiff'):
+            print(word+2)
 
 # First Step: Convert PDF to TEXT for further processing
-pdfFile = "ordjud2.pdf"
+pdfFile = "ordjud.pdf"
 raw_text = convert_pdf_to_txt(pdfFile)
 
 ## Extra Step : Save the text in a .txt file for future processing
-fp = open("ordjud2.txt","w")
+fp = open("ordjud.txt","w")
 fp.write(raw_text)
 fp.close()
 
 # preprocess the Text extracted
 text_preprocessed = preprocess(raw_text)
 string = ie_preprocess(text_preprocessed)
-#print(string)
 
 # Extract Court names and Names within the document
-names = extract_names(raw_text)
-courtName = extract_court_name(string)
+#names = extract_names(raw_text)
+courtName = extract_court_name(raw_text)
 print(courtName)
-print(names)
 
 # Chunking with Regular Expressions
-grammer = r"""
-        NP: {<NN><JJ.*>*<NN.*>*<VB.*>+}
-           """
-cp = nltk.RegexpParser(grammer)
-result = cp.parse(string)
-print(result)
-result.draw()
+chunkGram = r"""
+Parties: {<NN>?<JJ><NN.?>+<VB.?>}
+"""
+
+chunkParser = nltk.RegexpParser(chunkGram)
+result = chunkParser.parse(string)
+print(result[1:100])
+#Extracting the Parties involved
+i=-1
+parties = ["",""]
+for res in result.subtrees():
+	if res.label() == 'Parties':
+		i=i+1
+		if(i==2):
+			break
+		for l in res.leaves():
+			parties[i] += str(l[0]+" ")
+    #print(res)
+    #print(res.leaves()[0])
+print("Parties Involved: "+str(parties))

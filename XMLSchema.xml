@@ -1,0 +1,59 @@
+<Case>
+	<Court>
+		<CourtName>Delhi</CourtName>
+	</Court>
+	<PartiesGroup>
+		<Parties>
+			<PetitionerGroup>
+				<Petitioner Type = "Apellant/Plaintiff/Petitioner/Applicant">Party 1</Petitioner>
+			</PetitionerGroup>
+			<RespondentGroup>
+				<Respondent Type = "Respondent/Defendent">Party 2</Respondent>
+			</RespondentGroup>
+		</Parties>
+	</PartiesGroup>
+
+	<CounselGroup>
+		//Advocate Names for both parties
+		<forPetitioner>
+			<CounselName>Name 1</CounselName>
+			<CounselName>Name 2</CounselName>
+			<CounselName>Name 3</CounselName>
+		</forPetitioner>
+		<forRespondent>
+			<CounselName>Name 1</CounselName>
+			<CounselName>Name 2</CounselName>
+			<CounselName>Name 3</CounselName>
+		</forRespondent>
+		</CounselGroup>
+	<CoramGroup>  // Judge Names  //Postion can be NA(Not Availabe), J., JJ. or C.J.I.
+		<Judge Position = "NA">Judge 1</Judge>
+		<Judge Position = "JJ.">Judge 2</Judge>
+	</CoramGroup>
+
+	<Date Month = "January" Date = "1" Year = "2015" Type="Reserved">1st January 2015</Date>
+	<Date Month = "January" Date = "1" Year = "2015" Type="Pronounced">1st January 2015</Date>
+
+	<JudgmentGroup Title = "Judgment/Order/P.C.">
+		// In judgement section from paragraphs we will need to extract different information like Cites, Act Names, Section References, etc.
+		<Para>
+			Text
+			<Cite>
+				<Title>Party 1 v. Party 2</Title>
+				<Citation>2015 CITE 370</Citation>
+			</Cite>
+			Text
+			<Act>
+				<Title id="TDA-1999">Trade Marks Act, 1999</Title>  //All act names like income tax act, trade marks act, guardian act, etc
+			</Act>
+			Text
+			<SecRef>
+				<Title id="TDA-1999-9">9</Title> // for "Section 9 of Trade Marks Act", Section NN of XYZ Act
+			</SecRef>
+			Text
+		</Para>
+		<Para>
+			Text
+		</Para>
+	</JudgmentGroup>
+</Case>
