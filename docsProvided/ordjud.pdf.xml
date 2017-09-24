@@ -1,1 +1,49 @@
-b'<Case>\n  <Court>\n    <CourtName>bombay</CourtName>\n  </Court>\n  <PartiesGroup>\n    <Parties>\n      <PetitionerGroup>\n        <Petitioner Type="plaintiff">jubilant agri consumer products limited</Petitioner>\n      </PetitionerGroup>\n      <RespondentGroup>\n        <Respondent Type="defendant"/>\n      </RespondentGroup>\n    </Parties>\n  </PartiesGroup>\n  <CounselGroup>\n    <forPetitioner>\n      <CounselName>defendantmr v r dhond</CounselName>\n      <CounselName>mr nishad nadkarni</CounselName>\n      <CounselName>mr vaibhav keni</CounselName>\n      <CounselName>mr sumeet rane</CounselName>\n      <CounselName>m s legasis partners</CounselName>\n      <CounselName>mr ravi kadam</CounselName>\n      <CounselName>mr a a kirpekar</CounselName>\n      <CounselName>m s mag legal</CounselName>\n    </forPetitioner>\n    <forRespondent/>\n  </CounselGroup>\n  <CoramGroup>\n    <Judge Position="j">s j kathawalla</Judge>\n  </CoramGroup>\n  <Date Date="10" Month="october" Type="reserved" Year="2013">10 th october 2013</Date>\n  <Date Date="13" Month="january" Type="pronounced" Year="2014">13 th january 2014</Date>\n</Case>\n'
+<?xml version='1.0' encoding='UTF-8'?>
+<Case>
+  <Court>
+    <CourtName>bombay</CourtName>
+  </Court>
+  <PartiesGroup>
+    <Parties>
+      <PetitionerGroup>
+        <Petitioner Type="plaintiff">pidilite industries limited</Petitioner>
+      </PetitionerGroup>
+      <RespondentGroup>
+        <Respondent Type="defendant">jubilant agri consumer products limited</Respondent>
+      </RespondentGroup>
+    </Parties>
+  </PartiesGroup>
+  <CounselGroup>
+    <forPetitioner>
+      <CounselName>defendantmr v r dhond</CounselName>
+      <CounselName>mr nishad nadkarni</CounselName>
+      <CounselName>mr vaibhav keni</CounselName>
+      <CounselName>mr sumeet rane</CounselName>
+      <CounselName>m s legasis partners</CounselName>
+    </forPetitioner>
+    <forRespondent>
+      <CounselName>mr ravi kadam</CounselName>
+      <CounselName>mr a a kirpekar</CounselName>
+      <CounselName>m s mag legal</CounselName>
+    </forRespondent>
+  </CounselGroup>
+  <CoramGroup>
+    <Judge Position="j">s j kathawalla</Judge>
+  </CoramGroup>
+  <Date Date="10" Month="october" Type="reserved" Year="2013">10 th october 2013</Date>
+  <Date Date="13" Month="january" Type="pronounced" Year="2014">13 th january 2014</Date>
+  <JudgementGroup Title="order">
+    <Para>
+      <Cite>
+        <Title>i t c limited company vs g t c industries ltd</Title>
+        <Citation>english law of joseph crosfield</Citation>
+      </Cite>
+      <Act>
+        <Title id="tma1999">trade marks act 1999</Title>
+      </Act>
+      <SecRef>
+        <Title id="tma1999-9c">9 c</Title>
+      </SecRef>
+    </Para>
+  </JudgementGroup>
+</Case>
