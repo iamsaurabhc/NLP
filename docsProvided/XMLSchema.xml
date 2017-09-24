@@ -25,7 +25,7 @@
 			<CounselName>Name 2</CounselName>
 			<CounselName>Name 3</CounselName>
 		</forRespondent>
-		</CounselGroup>
+	</CounselGroup>
 	<CoramGroup>  // Judge Names  //Postion can be NA(Not Availabe), J., JJ. or C.J.I.
 		<Judge Position = "NA">Judge 1</Judge>
 		<Judge Position = "JJ.">Judge 2</Judge>
@@ -51,7 +51,7 @@
 				<Title id="TDA-1999-9">9</Title> // for "Section 9 of Trade Marks Act", Section NN of XYZ Act
 			</SecRef>
 			Text
-		</Para>
+		</Para<name />
 		<Para>
 			Text
 		</Para>
