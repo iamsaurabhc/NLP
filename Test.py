@@ -36,13 +36,15 @@ parties, pt, rt = custLib.extractParties(words)
 
 #Get Counsel groups for both Petitioner and Respondent
 pc = custLib.extractPetitionerCounselGroup(words)
-#print("\nCOUNSEL GROUP:\nforApplicant:\n")
-#for counsel in pc:
-#    print(counsel)
-#print("\nforRespondent:\n")
 rc = custLib.extractRespondentCounselGroup(words)
-#for counsel in rc:
-#    print(counsel)
+'''
+print("\nCOUNSEL GROUP:\nforApplicant:\n")
+for counsel in pc:
+    print(counsel)
+print("\nforRespondent:\n")
+for counsel in rc:
+    print(counsel)
+'''
 
 #Get Coram group
 judge,judgeType,day,dayType,date,month,year = custLib.extractCoramGroup(words)
@@ -70,7 +72,7 @@ xmlPetitioner.text = parties[0]
 
 xmlRespondentGroup = etree.SubElement(xmlParties, 'RespondentGroup')
 xmlRespondent = etree.SubElement(xmlRespondentGroup, 'Respondent', Type=rt)
-xmlPetitioner.text = parties[1]
+xmlRespondent.text = parties[1]
 
 #Insert Counsel group
 xmlCounselGroup = etree.SubElement(xmlCase, 'CounselGroup')
@@ -81,7 +83,7 @@ for counsel in pc:
 
 xmlforRespondent = etree.SubElement(xmlCounselGroup, 'forRespondent')
 for counsel in rc:
-    xmlCounselName = etree.SubElement(xmlforPetitioner, 'CounselName')
+    xmlCounselName = etree.SubElement(xmlforRespondent, 'CounselName')
     xmlCounselName.text = counsel
 
 #Insert Coram group
@@ -94,5 +96,22 @@ for i,d in enumerate(day):
     xmlDate = etree.SubElement(xmlCase, 'Date', Month = month[i], Date = date[i], Year = year[i], Type = dayType[i])
     xmlDate.text = day[i]
 
+#Insert Judgement Group:
+xmlJudgementGroup = etree.SubElement(xmlCase, 'JudgementGroup', Title=judgementType)
+xmlPara = etree.SubElement(xmlJudgementGroup, 'Para')
+xmlCite = etree.SubElement(xmlPara, 'Cite')
+xmlCiteTitle = etree.SubElement(xmlCite, 'Title')
+xmlCiteTitle.text = citeTitle[0]
+xmlCitation = etree.SubElement(xmlCite, 'Citation')
+xmlCitation.text = citation[0]
+
+xmlAct = etree.SubElement(xmlPara, 'Act')
+xmlActTitle = etree.SubElement(xmlAct, 'Title' , id = actId)
+xmlActTitle.text = actTitle[0]
+xmlSec = etree.SubElement(xmlPara, 'SecRef')
+xmlSecTitle = etree.SubElement(xmlSec, 'Title' , id = sectionId)
+xmlSecTitle.text = sectionTitle[0]
+
+#Save it to an XML File
 tree = etree.ElementTree(xmlCase)
-tree.write('ordjud.xml', pretty_print=True, xml_declaration=True,   encoding="utf-8")
+tree.write(pdfFile+'.xml', pretty_print=True, xml_declaration=True,   encoding="utf-8")
